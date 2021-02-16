@@ -87,6 +87,7 @@ class _Home extends State<Home> {
   Widget build(BuildContext context) {
     String channelID = channelIDs[channelIndex];
     return Scaffold(
+      backgroundColor: Colors.black,
       body: RawKeyboardListener(
         onKey: this.onChange,
         focusNode: this.focusNode,
