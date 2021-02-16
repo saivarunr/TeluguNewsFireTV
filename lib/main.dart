@@ -88,6 +88,7 @@ class _Home extends State<Home> {
     String channelID = channelIDs[channelIndex];
     return Scaffold(
       body: RawKeyboardListener(
+        onKey: this.onChange,
         focusNode: this.focusNode,
         child: YouTubePlayer(key: Key(channelID), channelID: channelID),
       ),
