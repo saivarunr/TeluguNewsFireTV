@@ -1,9 +1,11 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
 
 import 'YoutubePlayer.dart';
-import 'Channels.dart' as channel_data;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,17 +35,37 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   FocusNode focusNode = new FocusNode();
+  bool loading = false;
 
   int channelIndex = 0;
-  List<String> channelIDs = channel_data.channels.values.toList();
-  List<String> channelNames = channel_data.channels.keys.toList();
+  List<String> channelIDs = [];
+  List<String> channelNames = [];
 
   @override
   void initState() {
     try {
       Screen.keepOn(true);
+      this.fetchChannels();
     } catch (e) {}
     super.initState();
+  }
+
+  Future<void> fetchChannels() async {
+    setState(() {
+      this.loading = true;
+    });
+    Dio dio = new Dio();
+    Response response = await dio.get(
+        "https://gist.githubusercontent.com/saivarunr/46acbe51527075da10c7315d0922e66d/raw/json");
+    Map<String, dynamic> raw = jsonDecode(response.data);
+    Map<String, String> data =
+        raw.map((key, value) => MapEntry(key, value.toString()));
+
+    setState(() {
+      this.channelIDs = data.values.toList();
+      this.channelNames = data.keys.toList();
+      this.loading = false;
+    });
   }
 
   @override
@@ -88,11 +110,15 @@ class _Home extends State<Home> {
     String channelID = channelIDs[channelIndex];
     return Scaffold(
       backgroundColor: Colors.black,
-      body: RawKeyboardListener(
-        onKey: this.onChange,
-        focusNode: this.focusNode,
-        child: YouTubePlayer(key: Key(channelID), channelID: channelID),
-      ),
+      body: this.loading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : RawKeyboardListener(
+              onKey: this.onChange,
+              focusNode: this.focusNode,
+              child: YouTubePlayer(key: Key(channelID), channelID: channelID),
+            ),
     );
   }
 }

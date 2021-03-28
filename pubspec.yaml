@@ -26,6 +26,7 @@ dependencies:
   flutter_launcher_name: ^0.0.1
   flutter:
     sdk: flutter
+  dio: ^3.0.10
 
 
   # The following adds the Cupertino Icons font to your application.
