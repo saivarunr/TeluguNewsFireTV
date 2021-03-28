@@ -41,7 +41,9 @@ class _Home extends State<Home> {
   List<String> channelIDs = [];
   List<String> channelNames = [];
 
-  @override
+  get isLoading =>
+      loading || channelNames.length == 0 || channelIDs.length == 0;
+
   void initState() {
     try {
       Screen.keepOn(true);
@@ -107,10 +109,13 @@ class _Home extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    String channelID = channelIDs[channelIndex];
+    String channelID;
+    if (this.channelIDs.length > 0) {
+      channelID = channelIDs[channelIndex];
+    }
     return Scaffold(
       backgroundColor: Colors.black,
-      body: this.loading
+      body: isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
