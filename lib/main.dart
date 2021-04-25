@@ -77,15 +77,17 @@ class _Home extends State<Home> {
   }
 
   void onChange(RawKeyEvent rawKeyEvent) {
-    if (rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId ||
-        rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId) {
-      this.nextChannel();
-      return;
-    }
-    if (rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId ||
-        rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId) {
-      this.previousChannel();
-      return;
+    if (rawKeyEvent.runtimeType.toString() == 'RawKeyDownEvent') {
+      if (rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId ||
+          rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId) {
+        this.nextChannel();
+        return;
+      }
+      if (rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId ||
+          rawKeyEvent.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId) {
+        this.previousChannel();
+        return;
+      }
     }
   }
 
